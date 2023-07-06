@@ -4,6 +4,6 @@
 """
 
 
-def add(a: int, b: int) -> int:
+def add(a: float, b: float) -> float:
     """retrns sum of a and b"""
-    return int(a + b)
+    return a + b
