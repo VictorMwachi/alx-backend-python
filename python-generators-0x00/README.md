@@ -1,0 +1,1 @@
+craete a mysql db nd seed datausing seed.py
