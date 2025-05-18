@@ -14,7 +14,7 @@ def paginate_users(page_size, offset=0):
 
 
 def lazy_paginate(page_size):
-    for user in paginate_users(page_size):
+    for user in paginate_users(page_size, offset):
         print(*user)
 
 lazy_paginate(50)
