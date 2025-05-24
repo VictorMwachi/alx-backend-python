@@ -1,7 +1,10 @@
 import sqlite3
 import functools
 from datetime import datetime
-
+"""
+Create a decorator to log all SQL queries executed by a function.
+Learn to intercept function calls to enhance observability.
+"""
 
 def log_queries(func):
     @functools.wraps(func)
