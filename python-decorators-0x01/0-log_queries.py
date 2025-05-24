@@ -7,9 +7,8 @@ from datetime import datetime
 """ YOUR CODE GOES HERE"""
 def log_queries(func):
     def wrapper(*args,**kwargs):
-        print(datetime.now())
-        result = func(*args,**kwargs)
+        connect = func(*args,**kwargs)
         print(datetime.now(),result)
-        print(datetime.now())
-        return result
+        
+        return connect
     return wrapper
