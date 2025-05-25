@@ -12,3 +12,7 @@ class DatabaseConnection:
     def __exit__(self,type,value,traceback):
         if self.conn:
             self.conn.close()
+
+with DatabaseConnection as db_conn:
+    cursor = db_conn.cursor()
+    cursor.execute('SELECT * FROM users')
