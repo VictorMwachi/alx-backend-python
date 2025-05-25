@@ -13,8 +13,19 @@ def with_db_connection(func):
         return result
     return wrapper
 
-def retry_on_failure(func,retries=3, delay=2):
-    @functools.wraps(func,retries=3, delay=2)
-    def wrapper(*args,**kwargs):
-        time.sleep(delay)
-        time.
+def retry_on_failure(retries=3, delay=2):
+    def decorator_retry(func):
+        @functools.wraps(func)
+        def wrapper(*args,**kwargs):
+            for count in range(retries):
+                try:
+                    result = func(*args,**kwargs)
+                    return result
+                except sqlite3.Error as e:
+                    print(f"Operation failed with err: {e}")
+                    if(t==retries-1):
+                        print(f"Timeout!! Maximum retries reached")
+                        raise
+                    time.sleep(delay)
+        return wrapper
+    return decorator_retry
