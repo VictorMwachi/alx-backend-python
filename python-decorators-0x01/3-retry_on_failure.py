@@ -23,7 +23,7 @@ def retry_on_failure(retries=3, delay=2):
                     return result
                 except sqlite3.Error as e:
                     print(f"Operation failed with err: {e}")
-                    if(t==retries-1):
+                    if(count==retries-1):
                         print(f"Timeout!! Maximum retries reached")
                         raise
                     time.sleep(delay)
