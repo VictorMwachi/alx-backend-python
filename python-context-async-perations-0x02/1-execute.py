@@ -21,6 +21,6 @@ class ExecuteQuery:
         if self.conn:
             self.conn.close()
 
-    with ExecuteQuery('example.db', 'SELECT * FROM users WHERE age > ?', 25) as results:
-    for row in results:
-        print(row)
+    with ExecuteQuery('user.db', 'SELECT * FROM users WHERE age > ?', 25) as results:
+        for row in results:
+            print(row)
