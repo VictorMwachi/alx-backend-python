@@ -20,3 +20,7 @@ class ExecuteQuery:
             self.cursor.close()
         if self.conn:
             self.conn.close()
+
+    with ExecuteQuery('example.db', 'SELECT * FROM users WHERE age > ?', 25) as results:
+    for row in results:
+        print(row)
