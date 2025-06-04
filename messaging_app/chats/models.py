@@ -15,7 +15,7 @@ class user(AbstractUser):
     
 class Conversation(models.Model):
     conversation_id = models.UUIDField(primary_key=True,default=uuid.uuid4,editable=False)
-    users = models.ManyToManyField(User,related_name='conversation')
+    users = models.ManyToManyField(user,related_name='participants')
 
     def __str__(self):
         return self.conversation_id
