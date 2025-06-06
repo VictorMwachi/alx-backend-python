@@ -14,12 +14,12 @@ class UserSerializer(serializers.ModelSerializer):
     
     def validate_email(self, value):
         if not value.endswith('.com'):
-            serializers.ValidateError('Valid email required')
+            serializers.ValidationError('Valid email required')
         return value
     
     def validate_phonenumber(self, value):
         if not value.isdigit():
-            serializers.ValidateError('Valid phonenumber required')
+            serializers.ValidationError('Valid phonenumber required')
         return value
         
 class MessageSerializer(serializers.ModelSerializer):
