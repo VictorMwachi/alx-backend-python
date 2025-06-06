@@ -3,18 +3,34 @@ from .models import User, Conversation, Message
 
 
 class UserSerializer(serializers.ModelSerializer):
+    full_name = serializers.SerializerMethodField()
+    phonenumber = serializers.CharField()
     class Meta:
         model = User
-        fields = ['user_id','email','first_name','last_name','phonenumber']
+        fields = ['user_id','email','full_name','phonenumber']
 
-class ConversationSerializer(serializers.ModelSerializer):
-    users = serializers.PrimaryKeyRelatedField(many=True,querysets=User.objects.all())
-    class Meta:
-        model = Conversation
-        fields = ['conversation_id','users']
-
+    def get_full_name(self, obj):
+        return f"{obj.first_name} {obj.last_name}"
+    
+    def validate_email(self, value):
+        if not value.endswith('.com'):
+            serializers.ValidateError('Valid email required')
+        return value
+    
+    def validate_phonenumber(self, value):
+        if not value.isdigit():
+            serializers.ValidateError('Valid phonenumber required')
+        return value
+        
 class MessageSerializer(serializers.ModelSerializer):
     sender = UserSerializer(read_only=True)
     class Meta:
         model = Message
         fields = ['message_id','conversation_id','user_id','message_body','sent_at']
+
+class ConversationSerializer(serializers.ModelSerializer):
+    users = UserSerializer(many=True,read_only = True)
+    messages = MessageSerializer(many=True,read_only = True)
+    class Meta:
+        model = Conversation
+        fields = ['conversation_id','users','messages']
