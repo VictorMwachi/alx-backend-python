@@ -15,6 +15,8 @@ class User(AbstractUser):
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['first_name','last_name']
+    related_name='custom_user_set',  # Add this line
+    related_query_name='custom_user'
 
     def __str__(self):
         return self.email
@@ -22,7 +24,7 @@ class User(AbstractUser):
 class Conversation(models.Model):
     conversation_id = models.UUIDField(primary_key=True,default=uuid.uuid4,editable=False)
     users = models.ManyToManyField(User,related_name='conversations')
-    
+
     def __str__(self):
         return str(self.conversation_id)
     
