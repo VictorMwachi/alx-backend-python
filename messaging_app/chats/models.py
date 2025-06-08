@@ -27,7 +27,6 @@ class CustomUserManager(BaseUserManager):
     
 class User(AbstractUser):
     user_id = models.UUIDField(primary_key=True,default=uuid.uuid4,editable=False)
-    username = None
     email = models.EmailField(unique=True,null=False)
     first_name = models.CharField(max_length=25,null=False)
     last_name = models.CharField(max_length=25,null=False)
@@ -36,8 +35,6 @@ class User(AbstractUser):
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['first_name','last_name']
-    related_name='custom_user_set',  # Add this line
-    related_query_name='custom_user'
 
     objects = CustomUserManager()
 
@@ -53,9 +50,9 @@ class Conversation(models.Model):
     
 class Message(models.Model):
     message_id = models.UUIDField(primary_key=True,default=uuid.uuid4,editable=False)
-    user = models.ForeignKey(User,on_delete=models.CASCADE,related_name='messages')
+    sender = models.ForeignKey(User,on_delete=models.CASCADE,related_name='messages')
     conversation = models.ForeignKey(Conversation,on_delete=models.CASCADE,related_name='messages')
-    message_body = models.CharField(null=False)
+    message_body = models.TextField(null=False)
     created_at = models.DateTimeField(auto_now_add=True)
     sent_at = models.DateTimeField(auto_now_add=True)
 
