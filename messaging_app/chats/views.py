@@ -35,3 +35,10 @@ class ConversationViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         return Conversation.ojects.filter(user=self.request.user)
+    
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(user=request.user)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
