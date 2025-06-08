@@ -16,9 +16,13 @@ class UserViewSet(viewsets.ModelViewSet):
 class MessageViewSet(viewsets.ModelViewSet):
     queryset = Message.objects.all()
     serializer_class = MessageSerializer
-
+    
     def get_queryset(self):
-        return Message.objects.filter(user=self.request.user)
+        # Only show messages in conversations the user belongs to
+        return Message.objects.filter(conversation__users=self.request.user)
+
+    def perform_create(self, serializer):
+        serializer.save()  
     
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
