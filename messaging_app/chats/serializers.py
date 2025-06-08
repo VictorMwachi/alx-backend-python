@@ -26,7 +26,7 @@ class MessageSerializer(serializers.ModelSerializer):
     sender = UserSerializer(read_only=True)
     class Meta:
         model = Message
-        fields = ['message_id','conversation_id','user_id','message_body','sent_at']
+        fields = ['message_id','conversation_id','user_id','sender','message_body','sent_at']
 
 class ConversationSerializer(serializers.ModelSerializer):
     users = UserSerializer(many=True,read_only = True)
