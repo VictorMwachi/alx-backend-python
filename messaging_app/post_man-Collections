@@ -1,0 +1,20 @@
+{
+	"info": {
+		"_postman_id": "7ea2299f-bbf0-46d0-820d-69f30e6e3f55",
+		"name": "post_man-Collections",
+		"description": "this a test four our rest framework endpoints",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "9562641"
+	},
+	"item": [
+		{
+			"name": "New Request",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://127.0.0.1:8000/api/"
+			},
+			"response": []
+		}
+	]
+}
