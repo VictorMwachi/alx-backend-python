@@ -23,17 +23,12 @@ class UserSerializer(serializers.ModelSerializer):
         return value
         
 class MessageSerializer(serializers.ModelSerializer):
-    conversation_id = serializers.IntegerField(required=False, write_only=True)
-    recipient_ids = serializers.PrimaryKeyRelatedField(
-        queryset=User.objects.all(), many=True, write_only=True, required=False
-    )
     sender = UserSerializer(read_only=True)
-    conversation = serializers.PrimaryKeyRelatedField(read_only=True)
+    conversation = serializers.PrimaryKeyRelatedField(queryset=Conversation.objects.all(), required=True)
     
     class Meta:
         model = Message
-        fields = ['message_id', 'conversation_id', 'recipient_ids', 'conversation',
-                  'sender', 'message_body', 'sent_at']
+        fields = ['message_id', 'conversation','message_body', 'sender', 'sent_at']
 
     def validate(self, data):
         if not data.get('conversation_id') and not data.get('recipient_ids'):
@@ -41,8 +36,7 @@ class MessageSerializer(serializers.ModelSerializer):
         return data
 
     def create(self, validated_data):
-        sender = self.context['request'].user
-        validated_data.pop('user', None)  # remove if accidentally included
+        validated_data['sender'] = self.context['request'].user
         conversation_id = validated_data.pop('conversation_id', None)
         recipients = validated_data.pop('recipient_ids', [])
 
@@ -71,8 +65,17 @@ class MessageSerializer(serializers.ModelSerializer):
         return message
 
 class ConversationSerializer(serializers.ModelSerializer):
-    users = UserSerializer(many=True,read_only = True)
+    participants = UserSerializer(many=True,read_only = True)
     messages = MessageSerializer(many=True,read_only = True)
+    participants_emails = serializers.SerializerMethodField()
     class Meta:
         model = Conversation
-        fields = ['conversation_id','users','messages']
+        fields = ['conversation_id','participants','messages','participants_emails']
+
+    def get_participants_emails(self, obj):
+        return [user.email for user in obj.participants.all()]
+    
+    def validate(self, data):
+        if 'participants' not in data or not data['participants']:
+            raise serializers.ValidationError("At least one participant is required.")
+        return data

@@ -28,6 +28,7 @@ class CustomUserManager(BaseUserManager):
 class User(AbstractUser):
     user_id = models.UUIDField(primary_key=True,default=uuid.uuid4,editable=False)
     email = models.EmailField(unique=True,null=False)
+    username = None  # Disable username field
     first_name = models.CharField(max_length=25,null=False)
     last_name = models.CharField(max_length=25,null=False)
     password = models.CharField(max_length=128,validators=[MinLengthValidator(8)])
