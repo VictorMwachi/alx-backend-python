@@ -43,7 +43,7 @@ class User(AbstractUser):
     
 class Conversation(models.Model):
     conversation_id = models.UUIDField(primary_key=True,default=uuid.uuid4,editable=False)
-    users = models.ManyToManyField(User,related_name='conversations')
+    participants = models.ManyToManyField(User,related_name='conversations')
 
     def __str__(self):
         return str(self.conversation_id)
